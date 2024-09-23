@@ -1,18 +1,18 @@
-import Cargo from "../models/Cargo";
+import Dependency from "../models/Dependency";
 
 import { Request, Response } from 'express';
 
-const crearCargo = async (req: Request, res: Response) => {
+const crearDependency = async (req: Request, res: Response) => {
 
-    if (!req.body.name) return res.status(400).json({
+    if (!req.body.name || !req.body.direccion || !req.body.telefono) return res.status(400).json({
         status: "error",
         message: "Rellene los campos"
     })
     try {
-        const response = await Cargo.findOne(req.body)
+        const response = await Dependency.findOne(req.body)
         if (response) return res.status(400).json({
             status: "error",
-            error: "Cargo ya existente"
+            error: "Dependency ya existente"
         })
     } catch (error: any) {
         return res.status(500).json({
@@ -21,35 +21,36 @@ const crearCargo = async (req: Request, res: Response) => {
         })
     }
 
-    const cargo = new Cargo(req.body)
+    const dependency = new Dependency(req.body)
 
-    await cargo.save().catch((error: any) => {
+    await dependency.save().catch((error: any) => {
         return res.status(500).json({
             status: "error",
             error: error.message
         })
 
     })
+
     return res.status(200).json({
         status: "success",
-        messae: `Se ha creado el cargo ${cargo.name}`
+        messabge: `Se ha creado la dependency ${dependency.name}`
     })
 }
 
-const leerCargos = async (_req: Request, res: Response) => {
+const leerDependencys = async (_req: Request, res: Response) => {
 
     try {
 
-        const response = await Cargo.find().select({ __v: 0 });
+        const response = await Dependency.find().select({ __v: 0 });
 
         if (response.length < 1) return res.status(404).json({
             status: "error",
-            message: "No se han encontrado cargos almacenados"
+            message: "No se han encontrado dependencys almacenados"
         })
 
         return res.status(200).json({
             status: "success",
-            cargos: response
+            dependencys: response
         })
 
     } catch (error: any) {
@@ -60,21 +61,21 @@ const leerCargos = async (_req: Request, res: Response) => {
     }
 }
 
-const leerCargosById = async (req: Request, res: Response) => {
+const leerDependencysById = async (req: Request, res: Response) => {
 
     try {
 
-        const response = await Cargo.findOne({ _id: req.params.id }).select({ __v: 0 });
+        const response = await Dependency.findOne({ _id: req.params.id }).select({ __v: 0 });
 
         if (!response) return res.status(404).json({
             status: "error",
-            message: "No se han encontrado cargos almacenados",
+            message: "No se han encontrado dependencys almacenados",
             response
         })
 
         return res.status(200).json({
             status: "success",
-            cargos: response
+            dependencys: response
         })
 
     } catch (error: any) {
@@ -85,15 +86,15 @@ const leerCargosById = async (req: Request, res: Response) => {
     }
 }
 
-const actualizarCargo = async (req: Request, res: Response) => {
+const actualizarDependency = async (req: Request, res: Response) => {
 
-    if (!req.body.name) return res.status(400).json({
+    if (!!req.body) return res.status(400).json({
         status: "error",
         message: `Peticion incorrecta falta agregar un nombre para actualizar`
     })
 
     try {
-        const old_response = await Cargo.findOne({ _id: req.params.id }).select({ __v: 0 });
+        const old_response = await Dependency.findOne({ _id: req.params.id }).select({ __v: 0 });
 
         if (!old_response) return res.status(404).json({
             status: "error",
@@ -105,12 +106,16 @@ const actualizarCargo = async (req: Request, res: Response) => {
             message: `Peticion incorrecta ha agregado el mismo nombre ya existente`
 
         })
+        const updateDependency = req.body;
+        if(!updateDependency.name) delete updateDependency.name;
+        if(!updateDependency.direccion) delete updateDependency.direccion;
+        if(!updateDependency.telefono) delete updateDependency.telefono;
 
-        const new_response = await Cargo.findByIdAndUpdate({ _id: req.params.id },req.body, { new: true });
+        const new_response = await Dependency.findByIdAndUpdate({ _id: req.params.id },updateDependency, { new: true });
 
         return res.status(200).json({
             status: "success",
-            message: `Se ha actualizado el Cargo: (${old_response.name}) a el nuevo Cargo: (${new_response?.name})`
+            message: `Se ha actualizado la Dependency: (${old_response}) a la nueva Dependency: (${new_response})`
         })
 
     } catch (error: any) {
@@ -124,10 +129,10 @@ const actualizarCargo = async (req: Request, res: Response) => {
 
 }
 
-const  borrarCargo = async( req: Request, res: Response)=> {
+const  borrarDependency = async( req: Request, res: Response)=> {
 
     try{
-        const response = await Cargo.findByIdAndDelete({_id: req.params.id});
+        const response = await Dependency.findByIdAndDelete({_id: req.params.id});
 
         if(!response) return res.status(404).json({
             status:"error",
@@ -136,7 +141,7 @@ const  borrarCargo = async( req: Request, res: Response)=> {
 
         return res.status(200).json({
             status: "success",
-            message: `Se ha eliminado el Cargo: ${response.name}`
+            message: `Se ha eliminado la Dependency: ${response}`
         })
 
     }catch(error: any){
@@ -159,9 +164,9 @@ const  borrarCargo = async( req: Request, res: Response)=> {
 
 
 export default {
-    crearCargo,
-    leerCargos,
-    leerCargosById,
-    actualizarCargo,
-    borrarCargo
+    crearDependency,
+    leerDependencys,
+    leerDependencysById,
+    actualizarDependency,
+    borrarDependency
 } 

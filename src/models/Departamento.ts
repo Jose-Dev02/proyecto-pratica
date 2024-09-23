@@ -7,9 +7,10 @@ const DepartamentoSchema = new Schema({
     },
     id_dependency: {
         type: Schema.ObjectId,
-        ref: "Dependency"
+        ref: "Dependency",
+        require: true
     }
 
 })
 
-module.exports = model("Departamento", DepartamentoSchema);
+export default model("Departamento", DepartamentoSchema);

@@ -16,4 +16,4 @@ const DependencySchema = new Schema({
 
 })
 
-module.exports = model("Dependency", DependencySchema);
+export default model("Dependency", DependencySchema);
