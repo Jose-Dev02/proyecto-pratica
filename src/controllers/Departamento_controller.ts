@@ -106,8 +106,8 @@ const actualizarDepartamento = async (req: Request, res: Response) => {
 
         })
         const updateDepartamento = req.body;
-        if(!updateDepartamento.name) delete updateDepartamento.name
-        if(!updateDepartamento.id_dependency) delete updateDepartamento.id_dependency
+        if(!updateDepartamento.name || updateDepartamento.name === old_response.name) delete updateDepartamento.name
+        if(!updateDepartamento.id_dependency || updateDepartamento.id_dependency === old_response.id_dependency ) delete updateDepartamento.id_dependency
 
         const new_response = await Departamento.findByIdAndUpdate({ _id: req.params.id }, updateDepartamento, { new: true })
                                                .select({ _id: 0, __v: 0 });

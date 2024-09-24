@@ -107,9 +107,9 @@ const actualizarDependency = async (req: Request, res: Response) => {
 
         })
         const updateDependency = req.body;
-        if(!updateDependency.name) delete updateDependency.name;
-        if(!updateDependency.direccion) delete updateDependency.direccion;
-        if(!updateDependency.telefono) delete updateDependency.telefono;
+        if(!updateDependency.name || updateDependency.name === old_response.name ) delete updateDependency.name;
+        if(!updateDependency.direccion || updateDependency.direccion === old_response.direccion) delete updateDependency.direccion;
+        if(!updateDependency.telefono || updateDependency.telefono === old_response.telefono) delete updateDependency.telefono;
 
         const new_response = await Dependency.findByIdAndUpdate({ _id: req.params.id },updateDependency, { new: true });
 

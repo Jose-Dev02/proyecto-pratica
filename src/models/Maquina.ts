@@ -10,7 +10,7 @@ const MaquinaSchema = new Schema({
         require: true
     }, 
     direccion_ip: {
-        type: Number,
+        type: String,
         require: true
     },
     direccion_mac: {
@@ -20,4 +20,4 @@ const MaquinaSchema = new Schema({
 
 })
 
-module.exports = model("Maquina", MaquinaSchema);
+export default  model("Maquina", MaquinaSchema);

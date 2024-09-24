@@ -5,6 +5,7 @@ import { connection } from "./database/connection";
 import CargoRouter from './routes/CargoRouter';
 import DepartamentoRouter from './routes/DepartamentoRouter';
 import DependencyRouter from './routes/DependencyRouter';
+import MaquinaRouter from './routes/MaquinaRouter';
 
 dotenv.config({ path: './Globals.env' });
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded());
 app.use("/api/cargo", CargoRouter);
 app.use("/api/departamento", DepartamentoRouter);
 app.use("/api/dependency", DependencyRouter);
+app.use("/api/maquina", MaquinaRouter);
 
 
 
