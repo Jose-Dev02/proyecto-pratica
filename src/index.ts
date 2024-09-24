@@ -1,14 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv'
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 import { connection } from "./database/connection";
-import CargoRouter from './routes/CargoRouter';
-import DepartamentoRouter from './routes/DepartamentoRouter';
-import DependencyRouter from './routes/DependencyRouter';
-import MaquinaRouter from './routes/MaquinaRouter';
-import RolRouter from './routes/RolRouter'
+import CargoRouter from "./routes/CargoRouter";
+import DepartamentoRouter from "./routes/DepartamentoRouter";
+import DependencyRouter from "./routes/DependencyRouter";
+import MaquinaRouter from "./routes/MaquinaRouter";
+import RolRouter from "./routes/RolRouter";
 
-dotenv.config({ path: './Globals.env' });
+dotenv.config({ path: "./Globals.env" });
 
 const PORT = process.env.SERVER_PORT ?? 3000;
 
@@ -27,10 +27,8 @@ app.use("/api/dependency", DependencyRouter);
 app.use("/api/maquina", MaquinaRouter);
 app.use("/api/rol", RolRouter);
 
-
-
 app.listen(PORT, () => {
-    console.log(`Server en Puerto: ${PORT} OnDate: ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`)
-})
-
-
+  console.log(
+    `Server en Puerto: ${PORT} OnDate: ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`
+  );
+});
