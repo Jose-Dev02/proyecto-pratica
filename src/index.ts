@@ -18,6 +18,9 @@ const PORT = process.env.SERVER_PORT ?? 3000;
 connection();
 
 const app = express();
+app.get("/", (_req, res) => {
+  return res.send("<h1>Api de Practica</h1>");
+});
 
 app.use(cors());
 

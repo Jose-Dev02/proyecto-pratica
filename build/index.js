@@ -19,6 +19,9 @@ dotenv_1.default.config({ path: "./Globals.env" });
 const PORT = process.env.SERVER_PORT ?? 3000;
 (0, connection_1.connection)();
 const app = (0, express_1.default)();
+app.get("/", (_req, res) => {
+    return res.send("<h1>Api de Practica</h1>");
+});
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
