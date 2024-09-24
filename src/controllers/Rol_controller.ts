@@ -101,7 +101,7 @@ const actualizarRol = async (req: Request, res: Response) => {
         if (old_response.status !== "fulfilled") throw new Error("Error old_response en BD")
         if (existingRole.status !== "fulfilled") throw new Error("Error existingPC en BD")
 
-        if (existingRole.value) return res.status(400).json({
+        if (!existingRole.value) return res.status(400).json({
             status: "error",
             message: `El Rol ${req.body.name} ya existe en la BD`
         })

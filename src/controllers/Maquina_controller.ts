@@ -10,14 +10,14 @@ const crearMaquina = async (req: Request, res: Response) => {
             message: "Rellene los campos"
         })
     try {
-        const response = await Maquina.find({
+        const response = await Maquina.findOne({
             $or: [
                 { name: req.body.name },
                 { direccion_ip: req.body.direccion_ip },
                 { direccion_mac: req.body.direccion_mac }
             ]
         })
-        if (response.length > 0) return res.status(400).json({
+        if (response) return res.status(400).json({
             status: "error",
             error: "Maquina ya existente",
         })
@@ -135,7 +135,7 @@ const actualizarMaquina = async (req: Request, res: Response) => {
         const [old_response,existingPC] = await Promise.allSettled([
             Maquina.findOne({ _id: req.params.id }).select({ _id: 0, __v: 0 }),
             
-            Maquina.find({$or:[
+            Maquina.findOne({$or:[
                 { name: req.body.name },
                 { direccion_ip: req.body.direccion_ip },
                 { direccion_mac: req.body.direccion_mac }
@@ -145,7 +145,7 @@ const actualizarMaquina = async (req: Request, res: Response) => {
         if(old_response.status !== "fulfilled") throw new Error("Error old_response en BD")
         if(existingPC.status !== "fulfilled") throw new Error("Error existingPC en BD")
 
-            if(existingPC.value) return res.status(400).json({
+            if(!existingPC.value) return res.status(400).json({
                 status: "error",
                 message: `Ya existe  en la BD `
             })

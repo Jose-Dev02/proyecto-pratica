@@ -101,7 +101,7 @@ const actualizarUser = async (req: Request, res: Response) => {
         if(old_response.status !== "fulfilled") throw new Error("Error old_response en BD")
         if(existingCI.status !== "fulfilled") throw new Error("Error existingCI en BD")
         
-        if(existingCI.value) return res.status(400).json({
+        if(!existingCI.value) return res.status(400).json({
             status: "error",
             message: `El CI ${req.body.CI} ya existe en la BD no puede haber 2 personas con el mismo CI`
         })

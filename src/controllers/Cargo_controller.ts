@@ -100,9 +100,9 @@ const actualizarCargo = async (req: Request, res: Response) => {
             message: "No se ha encontrado"
         })
 
-        if (req.body.name?.toLocaleLowerCase() === old_response.name?.toLocaleLowerCase()) return res.status(400).json({
+        if (req.body === old_response) return res.status(400).json({
             status: "Error",
-            message: `Peticion incorrecta ha agregado el mismo nombre ya existente`
+            message: `Peticion incorrecta ha agregado el mismo cargo`
 
         })
 
