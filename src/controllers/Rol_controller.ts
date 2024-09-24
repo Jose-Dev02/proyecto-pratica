@@ -1,18 +1,18 @@
-import Cargo from "../models/Cargo";
+import Rol from "../models/Rol";
 
 import { Request, Response } from 'express';
 
-const crearCargo = async (req: Request, res: Response) => {
+const crearRol = async (req: Request, res: Response) => {
 
     if (!req.body.name) return res.status(400).json({
         status: "error",
         message: "Rellene los campos"
     })
     try {
-        const response = await Cargo.findOne(req.body)
+        const response = await Rol.findOne(req.body)
         if (response) return res.status(400).json({
             status: "error",
-            error: "Cargo ya existente"
+            error: "Rol ya existente"
         })
     } catch (error: any) {
         return res.status(500).json({
@@ -21,9 +21,9 @@ const crearCargo = async (req: Request, res: Response) => {
         })
     }
 
-    const cargo = new Cargo(req.body)
+    const rol = new Rol(req.body)
 
-    await cargo.save().catch((error: any) => {
+    await rol.save().catch((error: any) => {
         return res.status(500).json({
             status: "error",
             error: error.message
@@ -32,24 +32,24 @@ const crearCargo = async (req: Request, res: Response) => {
     })
     return res.status(200).json({
         status: "success",
-        message: `Se ha creado el cargo ${cargo.name}`
+        message: `Se ha creado el rol ${rol.name}`
     })
 }
 
-const leerCargos = async (_req: Request, res: Response) => {
+const leerRols = async (_req: Request, res: Response) => {
 
     try {
 
-        const response = await Cargo.find().select({ __v: 0 });
+        const response = await Rol.find().select({ __v: 0 });
 
         if (response.length < 1) return res.status(404).json({
             status: "error",
-            message: "No se han encontrado cargos almacenados"
+            message: "No se han encontrado rols almacenados"
         })
 
         return res.status(200).json({
             status: "success",
-            cargos: response
+            rols: response
         })
 
     } catch (error: any) {
@@ -60,21 +60,21 @@ const leerCargos = async (_req: Request, res: Response) => {
     }
 }
 
-const leerCargosById = async (req: Request, res: Response) => {
+const leerRolsById = async (req: Request, res: Response) => {
 
     try {
 
-        const response = await Cargo.findOne({ _id: req.params.id }).select({ __v: 0 });
+        const response = await Rol.findOne({ _id: req.params.id }).select({ __v: 0 });
 
         if (!response) return res.status(404).json({
             status: "error",
-            message: "No se han encontrado cargos almacenados",
+            message: "No se han encontrado rols almacenados",
             response
         })
 
         return res.status(200).json({
             status: "success",
-            cargos: response
+            rols: response
         })
 
     } catch (error: any) {
@@ -85,7 +85,7 @@ const leerCargosById = async (req: Request, res: Response) => {
     }
 }
 
-const actualizarCargo = async (req: Request, res: Response) => {
+const actualizarRol = async (req: Request, res: Response) => {
 
     if (!req.body.name) return res.status(400).json({
         status: "error",
@@ -93,24 +93,34 @@ const actualizarCargo = async (req: Request, res: Response) => {
     })
 
     try {
-        const old_response = await Cargo.findOne({ _id: req.params.id }).select({ __v: 0 });
+        const [old_response, existingRole] = await Promise.allSettled([
+            Rol.findOne({ _id: req.params.id }).select({ __v: 0 }),
+            Rol.findOne({ name: req.body.name })
+        ])
 
-        if (!old_response) return res.status(404).json({
+        if (old_response.status !== "fulfilled") throw new Error("Error old_response en BD")
+        if (existingRole.status !== "fulfilled") throw new Error("Error existingPC en BD")
+
+        if (existingRole.value) return res.status(400).json({
+            status: "error",
+            message: `El Rol ${req.body.name} ya existe en la BD`
+        })
+        if (!old_response.value) return res.status(404).json({
             status: "error",
             message: "No se ha encontrado"
         })
 
-        if (req.body.name?.toLocaleLowerCase() === old_response.name?.toLocaleLowerCase()) return res.status(400).json({
+        if (req.body === old_response) return res.status(400).json({
             status: "Error",
             message: `Peticion incorrecta ha agregado el mismo nombre ya existente`
 
         })
 
-        const new_response = await Cargo.findByIdAndUpdate({ _id: req.params.id },req.body, { new: true });
+        const new_response = await Rol.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
 
         return res.status(200).json({
             status: "success",
-            message: `Se ha actualizado el Cargo: (${old_response.name}) a el nuevo Cargo: (${new_response?.name})`
+            message: `Se ha actualizado el Rol: (${old_response.value.name}) a el nuevo Rol: (${new_response?.name})`
         })
 
     } catch (error: any) {
@@ -124,30 +134,30 @@ const actualizarCargo = async (req: Request, res: Response) => {
 
 }
 
-const  borrarCargo = async( req: Request, res: Response)=> {
+const borrarRol = async (req: Request, res: Response) => {
 
-    try{
-        const response = await Cargo.findByIdAndDelete({_id: req.params.id});
+    try {
+        const response = await Rol.findByIdAndDelete({ _id: req.params.id });
 
-        if(!response) return res.status(404).json({
-            status:"error",
+        if (!response) return res.status(404).json({
+            status: "error",
             message: "No se ha encontrado"
         })
 
         return res.status(200).json({
             status: "success",
-            message: `Se ha eliminado el Cargo: ${response.name}`
+            message: `Se ha eliminado el Rol: ${response.name}`
         })
 
-    }catch(error: any){
+    } catch (error: any) {
 
         return res.status(500).json({
-            status:"error",
+            status: "error",
             message: error.message
         })
     }
 
-    
+
 }
 
 
@@ -159,9 +169,9 @@ const  borrarCargo = async( req: Request, res: Response)=> {
 
 
 export default {
-    crearCargo,
-    leerCargos,
-    leerCargosById,
-    actualizarCargo,
-    borrarCargo
+    crearRol,
+    leerRols,
+    leerRolsById,
+    actualizarRol,
+    borrarRol
 } 

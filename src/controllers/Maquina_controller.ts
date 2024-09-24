@@ -39,7 +39,7 @@ const crearMaquina = async (req: Request, res: Response) => {
     })
     return res.status(200).json({
         status: "success",
-        messae: `Se ha creado el maquina ${maquina.name}`
+        message: `Se ha creado el maquina ${maquina.name}`
     })
 }
 
@@ -132,9 +132,25 @@ const actualizarMaquina = async (req: Request, res: Response) => {
     })
 
     try {
-        const old_response = await Maquina.findOne({ _id: req.params.id }).select({ _id: 0, __v: 0 });
+        const [old_response,existingPC] = await Promise.allSettled([
+            Maquina.findOne({ _id: req.params.id }).select({ _id: 0, __v: 0 }),
+            
+            Maquina.find({$or:[
+                { name: req.body.name },
+                { direccion_ip: req.body.direccion_ip },
+                { direccion_mac: req.body.direccion_mac }
+            ]})
+        ])
+        
+        if(old_response.status !== "fulfilled") throw new Error("Error old_response en BD")
+        if(existingPC.status !== "fulfilled") throw new Error("Error existingPC en BD")
 
-        if (!old_response) return res.status(404).json({
+            if(existingPC.value) return res.status(400).json({
+                status: "error",
+                message: `Ya existe  en la BD `
+            })
+
+        if (!old_response.value) return res.status(404).json({
             status: "error",
             message: "No se ha encontrado"
         })
@@ -145,10 +161,10 @@ const actualizarMaquina = async (req: Request, res: Response) => {
 
         })
         const updateMaquina = req.body;
-        if (!updateMaquina.name || updateMaquina.name === old_response.name ) delete updateMaquina.name
-        if (!updateMaquina.id_Departamento || updateMaquina.id_Departamento === old_response.id_Departamento) delete updateMaquina.id_Departamento
-        if (!updateMaquina.direccion_ip || updateMaquina.direccion_ip === old_response.direccion_ip) delete updateMaquina.direccion_ip
-        if (!updateMaquina.direccion_mac || updateMaquina.direccion_mac === old_response.direccion_mac) delete updateMaquina.direccion_mac
+        if (!updateMaquina.name || updateMaquina.name === old_response.value.name ) delete updateMaquina.name
+        if (!updateMaquina.id_Departamento || updateMaquina.id_Departamento === old_response.value.id_Departamento) delete updateMaquina.id_Departamento
+        if (!updateMaquina.direccion_ip || updateMaquina.direccion_ip === old_response.value.direccion_ip) delete updateMaquina.direccion_ip
+        if (!updateMaquina.direccion_mac || updateMaquina.direccion_mac === old_response.value.direccion_mac) delete updateMaquina.direccion_mac
 
         const new_response = await Maquina.findByIdAndUpdate({ _id: req.params.id }, updateMaquina, { new: true })
             .select({ _id: 0, __v: 0 });

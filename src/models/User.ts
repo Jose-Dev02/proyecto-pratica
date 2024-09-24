@@ -12,8 +12,12 @@ const UserSchema = new Schema({
     apellido_2do: {
         type: String,
         require: true
-    }
+    },
+    CI: {
+        type: Number,
+        require: true
+    },
 
 })
 
-module.exports = model("User", UserSchema);
+export default  model("User", UserSchema);

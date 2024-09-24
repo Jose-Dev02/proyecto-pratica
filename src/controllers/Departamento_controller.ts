@@ -32,7 +32,7 @@ const crearDepartamento = async (req: Request, res: Response) => {
     })
     return res.status(200).json({
         status: "success",
-        messae: `Se ha creado el departamento ${departamento.name}`
+        message: `Se ha creado el departamento ${departamento.name}`
     })
 }
 

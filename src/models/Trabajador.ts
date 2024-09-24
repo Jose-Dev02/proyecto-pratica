@@ -2,10 +2,6 @@ import { Schema, model } from 'mongoose';
 
 const TrabajadorSchema = new Schema({
 
-    CI: {
-        type: Number,
-        require: true
-    },
     id_Departamento: {
         type: Schema.ObjectId,
         ref: "Departamento"

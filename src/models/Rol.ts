@@ -7,4 +7,4 @@ const RolSchema = new Schema({
     }, 
 })
 
-module.exports = model("Rol", RolSchema);
+export default model("Rol", RolSchema);
