@@ -14,7 +14,13 @@ const crearUser = async (req: Request, res: Response) => {
       message: "Rellene los campos",
     });
   try {
-    const response = await User.findOne(req.body.CI);
+    const response = await User.findOne({
+      $or: [
+        { CI: req.body.CI },
+        { correo: req.body.correo },
+        { telefono: req.body.telefono },
+      ],
+    });
     if (response)
       return res.status(400).json({
         status: "error",
@@ -96,20 +102,25 @@ const actualizarUser = async (req: Request, res: Response) => {
     });
 
   try {
-    const [old_response, existingCI] = await Promise.allSettled([
+    const [old_response, exist] = await Promise.allSettled([
       User.findOne({ _id: req.params.id }).select({ __v: 0 }),
-      User.findOne({ CI: req.body.CI }),
+      User.findOne({
+        $or: [
+          { CI: req.body.CI },
+          { correo: req.body.correo },
+          { telefono: req.body.telefono },
+        ],
+      }),
     ]);
 
     if (old_response.status !== "fulfilled")
       throw new Error("Error old_response en BD");
-    if (existingCI.status !== "fulfilled")
-      throw new Error("Error existingCI en BD");
+    if (exist.status !== "fulfilled") throw new Error("Error exist en BD");
 
-    if (!existingCI.value)
+    if (!exist.value)
       return res.status(400).json({
         status: "error",
-        message: `El CI ${req.body.CI} ya existe en la BD no puede haber 2 personas con el mismo CI`,
+        message: `Ya existe en la BD `,
       });
     if (!old_response.value)
       return res.status(404).json({
@@ -124,20 +135,30 @@ const actualizarUser = async (req: Request, res: Response) => {
       });
 
     const updateUser = req.body;
-    if (!updateUser || updateUser.name === old_response.value.name)
+
+    if (!updateUser.name || updateUser.name === old_response.value.name)
       delete updateUser.name;
     if (
-      !updateUser ||
+      !updateUser.apellido_1ro ||
       updateUser.apellido_1ro === old_response.value.apellido_1ro
     )
       delete updateUser.apellido_1ro;
     if (
-      !updateUser ||
+      !updateUser.apellido_2do ||
       updateUser.apellido_2do === old_response.value.apellido_2do
     )
       delete updateUser.apellido_2do;
-    if (!updateUser || updateUser.CI === old_response.value.CI)
+    if (!updateUser.CI || updateUser.CI === old_response.value.CI)
       delete updateUser.CI;
+
+    if (!updateUser.correo || updateUser.correo === old_response.value.correo)
+      delete updateUser.correo;
+
+    if (
+      !updateUser.telefono ||
+      updateUser.telefono === old_response.value.telefono
+    )
+      delete updateUser.telefono;
 
     const new_response = await User.findByIdAndUpdate(
       { _id: req.params.id },

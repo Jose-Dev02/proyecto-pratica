@@ -150,7 +150,7 @@ const borrarDepartamento = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: "success",
-      message: `Se ha eliminado el Departamento: ${response}`,
+      message: `Se ha eliminado el Departamento: ${response.name}`,
     });
   } catch (error: any) {
     return res.status(500).json({

@@ -17,6 +17,14 @@ const UserSchema = new Schema({
     type: Number,
     require: true,
   },
+  telefono: {
+    type: String,
+    require: true,
+  },
+  correo: {
+    type: String,
+    require: true,
+  },
 });
 
 export default model("User", UserSchema);

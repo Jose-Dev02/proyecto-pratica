@@ -7,6 +7,9 @@ import DepartamentoRouter from "./routes/DepartamentoRouter";
 import DependencyRouter from "./routes/DependencyRouter";
 import MaquinaRouter from "./routes/MaquinaRouter";
 import RolRouter from "./routes/RolRouter";
+import UserRouter from "./routes/UserRouter";
+import TrabajadorRouter from "./routes/TrabajadorRouter";
+import ServicioRouter from "./routes/ServicioRouter";
 
 dotenv.config({ path: "./Globals.env" });
 
@@ -26,6 +29,9 @@ app.use("/api/departamento", DepartamentoRouter);
 app.use("/api/dependency", DependencyRouter);
 app.use("/api/maquina", MaquinaRouter);
 app.use("/api/rol", RolRouter);
+app.use("/api/user", UserRouter);
+app.use("/api/trabajador", TrabajadorRouter);
+app.use("/api/trabajador", ServicioRouter);
 
 app.listen(PORT, () => {
   console.log(

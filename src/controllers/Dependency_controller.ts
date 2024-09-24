@@ -163,7 +163,7 @@ const borrarDependency = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: "success",
-      message: `Se ha eliminado la Dependency: ${response}`,
+      message: `Se ha eliminado la Dependency: ${response.name}`,
     });
   } catch (error: any) {
     return res.status(500).json({

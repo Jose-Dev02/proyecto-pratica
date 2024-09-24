@@ -13,18 +13,10 @@ const TrabajadorSchema = new Schema({
     type: Schema.ObjectId,
     ref: "Cargo",
   },
-  telefono: {
-    type: Number,
-    require: true,
-  },
-  correo: {
-    type: String,
-    require: true,
-  },
   id_usuario: {
     type: Schema.ObjectId,
     ref: "User",
   },
 });
 
-module.exports = model("Trabajador", TrabajadorSchema);
+export default model("Trabajador", TrabajadorSchema);

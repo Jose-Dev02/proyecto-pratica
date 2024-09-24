@@ -10,7 +10,7 @@ const DependencySchema = new Schema({
     require: true,
   },
   telefono: {
-    type: Number,
+    type: String,
     require: true,
   },
 });
