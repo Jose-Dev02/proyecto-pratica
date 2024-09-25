@@ -1,6 +1,7 @@
 import User from "../models/User";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearUser = async (req: Request, res: Response) => {
   if (
@@ -199,6 +200,20 @@ const borrarUser = async (req: Request, res: Response) => {
     });
   }
 };
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(User, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
 
 export default {
   crearUser,
@@ -206,4 +221,5 @@ export default {
   leerUsersById,
   actualizarUser,
   borrarUser,
+  finder,
 };

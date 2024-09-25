@@ -1,6 +1,7 @@
 import Maquina from "../models/Maquina";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearMaquina = async (req: Request, res: Response) => {
   if (
@@ -222,6 +223,20 @@ const borrarMaquina = async (req: Request, res: Response) => {
     });
   }
 };
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Maquina, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
 
 export default {
   crearMaquina,
@@ -229,4 +244,5 @@ export default {
   leerMaquinasById,
   actualizarMaquina,
   borrarMaquina,
+  finder,
 };

@@ -10,5 +10,6 @@ router.post("/crear", Dependency_controller_1.default.crearDependency);
 router.put("/actualizar/:id?", Dependency_controller_1.default.actualizarDependency);
 router.get("/get-all", Dependency_controller_1.default.leerDependencys);
 router.get("/get-by-id/:id", Dependency_controller_1.default.leerDependencysById);
+router.get("/find/:find", Dependency_controller_1.default.finder);
 router.delete("/delete-by-id/:id", Dependency_controller_1.default.borrarDependency);
 exports.default = router;

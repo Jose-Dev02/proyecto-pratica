@@ -1,6 +1,7 @@
 import Rol from "../models/Rol";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearRol = async (req: Request, res: Response) => {
   if (!req.body.name)
@@ -157,6 +158,20 @@ const borrarRol = async (req: Request, res: Response) => {
     });
   }
 };
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Rol, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
 
 export default {
   crearRol,
@@ -164,4 +179,5 @@ export default {
   leerRolsById,
   actualizarRol,
   borrarRol,
+  finder,
 };

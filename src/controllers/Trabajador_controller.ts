@@ -1,6 +1,7 @@
 import Trabajador from "../models/Trabajador";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearTrabajador = async (req: Request, res: Response) => {
   if (
@@ -180,10 +181,26 @@ const borrarTrabajador = async (req: Request, res: Response) => {
   }
 };
 
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Trabajador, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
+
 export default {
   crearTrabajador,
   leerTrabajadors,
   leerTrabajadorsById,
   actualizarTrabajador,
   borrarTrabajador,
+  finder,
 };

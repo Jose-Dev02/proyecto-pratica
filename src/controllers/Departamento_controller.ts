@@ -1,6 +1,7 @@
 import Departamento from "../models/Departamento";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearDepartamento = async (req: Request, res: Response) => {
   if (!req.body.name || !req.body.id_dependency)
@@ -159,6 +160,20 @@ const borrarDepartamento = async (req: Request, res: Response) => {
     });
   }
 };
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Departamento, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
 
 export default {
   crearDepartamento,
@@ -166,4 +181,5 @@ export default {
   leerDepartamentosById,
   actualizarDepartamento,
   borrarDepartamento,
+  finder,
 };

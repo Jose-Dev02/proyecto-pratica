@@ -34,7 +34,7 @@ app.use("/api/maquina", MaquinaRouter);
 app.use("/api/rol", RolRouter);
 app.use("/api/user", UserRouter);
 app.use("/api/trabajador", TrabajadorRouter);
-app.use("/api/trabajador", ServicioRouter);
+app.use("/api/servicio", ServicioRouter);
 
 app.listen(PORT, () => {
   console.log(

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Trabajador_1 = __importDefault(require("../models/Trabajador"));
+const finder_service_1 = __importDefault(require("../services/finder_service"));
 const crearTrabajador = async (req, res) => {
     if (!req.body.id_Departamento ||
         !req.body.id_Rol ||
@@ -150,10 +151,26 @@ const borrarTrabajador = async (req, res) => {
         });
     }
 };
+const finder = async (req, res) => {
+    try {
+        const response = await (0, finder_service_1.default)(Trabajador_1.default, req.params.find);
+        return res.status(200).json({
+            status: "success",
+            data: response,
+        });
+    }
+    catch (Error) {
+        return res.status(400).json({
+            status: "error",
+            error: Error.message,
+        });
+    }
+};
 exports.default = {
     crearTrabajador,
     leerTrabajadors,
     leerTrabajadorsById,
     actualizarTrabajador,
     borrarTrabajador,
+    finder,
 };

@@ -32,7 +32,7 @@ app.use("/api/maquina", MaquinaRouter_1.default);
 app.use("/api/rol", RolRouter_1.default);
 app.use("/api/user", UserRouter_1.default);
 app.use("/api/trabajador", TrabajadorRouter_1.default);
-app.use("/api/trabajador", ServicioRouter_1.default);
+app.use("/api/servicio", ServicioRouter_1.default);
 app.listen(PORT, () => {
     console.log(`Server en Puerto: ${PORT} OnDate: ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`);
 });

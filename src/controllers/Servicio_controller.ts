@@ -1,6 +1,7 @@
 import Servicio from "../models/Servicio";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearServicio = async (req: Request, res: Response) => {
   if (!req.body.id_Trabajador || !req.body.id_Maquina || !req.body.horario)
@@ -174,10 +175,26 @@ const borrarServicio = async (req: Request, res: Response) => {
   }
 };
 
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Servicio, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
+
 export default {
   crearServicio,
   leerServicios,
   leerServiciosById,
   actualizarServicio,
   borrarServicio,
+  finder,
 };

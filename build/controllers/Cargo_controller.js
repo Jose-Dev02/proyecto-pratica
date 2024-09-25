@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Cargo_1 = __importDefault(require("../models/Cargo"));
+const finder_service_1 = __importDefault(require("../services/finder_service"));
 const crearCargo = async (req, res) => {
     if (!req.body.name)
         return res.status(400).json({
@@ -132,10 +133,26 @@ const borrarCargo = async (req, res) => {
         });
     }
 };
+const finder = async (req, res) => {
+    try {
+        const response = await (0, finder_service_1.default)(Cargo_1.default, req.params.find);
+        return res.status(200).json({
+            status: "success",
+            data: response,
+        });
+    }
+    catch (Error) {
+        return res.status(400).json({
+            status: "error",
+            error: Error.message,
+        });
+    }
+};
 exports.default = {
     crearCargo,
     leerCargos,
     leerCargosById,
     actualizarCargo,
     borrarCargo,
+    finder,
 };

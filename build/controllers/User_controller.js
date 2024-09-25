@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = __importDefault(require("../models/User"));
+const finder_service_1 = __importDefault(require("../services/finder_service"));
 const crearUser = async (req, res) => {
     if (!req.body.name ||
         !req.body.apellido_1ro ||
@@ -173,10 +174,26 @@ const borrarUser = async (req, res) => {
         });
     }
 };
+const finder = async (req, res) => {
+    try {
+        const response = await (0, finder_service_1.default)(User_1.default, req.params.find);
+        return res.status(200).json({
+            status: "success",
+            data: response,
+        });
+    }
+    catch (Error) {
+        return res.status(400).json({
+            status: "error",
+            error: Error.message,
+        });
+    }
+};
 exports.default = {
     crearUser,
     leerUsers,
     leerUsersById,
     actualizarUser,
     borrarUser,
+    finder,
 };

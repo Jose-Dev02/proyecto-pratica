@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Servicio_1 = __importDefault(require("../models/Servicio"));
+const finder_service_1 = __importDefault(require("../services/finder_service"));
 const crearServicio = async (req, res) => {
     if (!req.body.id_Trabajador || !req.body.id_Maquina || !req.body.horario)
         return res.status(400).json({
@@ -156,10 +157,26 @@ const borrarServicio = async (req, res) => {
         });
     }
 };
+const finder = async (req, res) => {
+    try {
+        const response = await (0, finder_service_1.default)(Servicio_1.default, req.params.find);
+        return res.status(200).json({
+            status: "success",
+            data: response,
+        });
+    }
+    catch (Error) {
+        return res.status(400).json({
+            status: "error",
+            error: Error.message,
+        });
+    }
+};
 exports.default = {
     crearServicio,
     leerServicios,
     leerServiciosById,
     actualizarServicio,
     borrarServicio,
+    finder,
 };

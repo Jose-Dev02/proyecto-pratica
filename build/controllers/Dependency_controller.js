@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Dependency_1 = __importDefault(require("../models/Dependency"));
+const finder_service_1 = __importDefault(require("../services/finder_service"));
 const crearDependency = async (req, res) => {
     if (!req.body.name || !req.body.direccion || !req.body.telefono)
         return res.status(400).json({
@@ -151,10 +152,26 @@ const borrarDependency = async (req, res) => {
         });
     }
 };
+const finder = async (req, res) => {
+    try {
+        const response = await (0, finder_service_1.default)(Dependency_1.default, req.params.find);
+        return res.status(200).json({
+            status: "success",
+            data: response,
+        });
+    }
+    catch (Error) {
+        return res.status(400).json({
+            status: "error",
+            error: Error.message,
+        });
+    }
+};
 exports.default = {
     crearDependency,
     leerDependencys,
     leerDependencysById,
     actualizarDependency,
     borrarDependency,
+    finder,
 };

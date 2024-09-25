@@ -1,4 +1,5 @@
 import Cargo from "../models/Cargo";
+import finder_service from "../services/finder_service";
 
 import { Request, Response } from "express";
 
@@ -147,10 +148,26 @@ const borrarCargo = async (req: Request, res: Response) => {
   }
 };
 
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Cargo, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
+
 export default {
   crearCargo,
   leerCargos,
   leerCargosById,
   actualizarCargo,
   borrarCargo,
+  finder,
 };

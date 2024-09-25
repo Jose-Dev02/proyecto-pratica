@@ -10,5 +10,6 @@ router.post("/crear", User_controller_1.default.crearUser);
 router.put("/actualizar/:id?", User_controller_1.default.actualizarUser);
 router.get("/get-all", User_controller_1.default.leerUsers);
 router.get("/get-by-id/:id", User_controller_1.default.leerUsersById);
+router.get("/find/:find", User_controller_1.default.finder);
 router.delete("/delete-by-id/:id", User_controller_1.default.borrarUser);
 exports.default = router;

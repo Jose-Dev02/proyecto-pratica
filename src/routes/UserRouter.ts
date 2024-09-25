@@ -7,6 +7,7 @@ router.post("/crear", UserController.crearUser);
 router.put("/actualizar/:id?", UserController.actualizarUser);
 router.get("/get-all", UserController.leerUsers);
 router.get("/get-by-id/:id", UserController.leerUsersById);
+router.get("/find/:find", UserController.finder);
 router.delete("/delete-by-id/:id", UserController.borrarUser);
 
 export default router;

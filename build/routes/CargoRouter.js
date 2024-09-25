@@ -10,5 +10,6 @@ router.post("/crear", Cargo_controller_1.default.crearCargo);
 router.put("/actualizar/:id?", Cargo_controller_1.default.actualizarCargo);
 router.get("/get-all", Cargo_controller_1.default.leerCargos);
 router.get("/get-by-id/:id", Cargo_controller_1.default.leerCargosById);
+router.get("/find/:find", Cargo_controller_1.default.finder);
 router.delete("/delete-by-id/:id", Cargo_controller_1.default.borrarCargo);
 exports.default = router;

@@ -10,5 +10,6 @@ router.post("/crear", Rol_controller_1.default.crearRol);
 router.put("/actualizar/:id?", Rol_controller_1.default.actualizarRol);
 router.get("/get-all", Rol_controller_1.default.leerRols);
 router.get("/get-by-id/:id", Rol_controller_1.default.leerRolsById);
+router.get("/find/:find", Rol_controller_1.default.finder);
 router.delete("/delete-by-id/:id", Rol_controller_1.default.borrarRol);
 exports.default = router;

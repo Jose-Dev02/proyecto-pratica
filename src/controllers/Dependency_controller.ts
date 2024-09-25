@@ -1,6 +1,7 @@
 import Dependency from "../models/Dependency";
 
 import { Request, Response } from "express";
+import finder_service from "../services/finder_service";
 
 const crearDependency = async (req: Request, res: Response) => {
   if (!req.body.name || !req.body.direccion || !req.body.telefono)
@@ -172,6 +173,20 @@ const borrarDependency = async (req: Request, res: Response) => {
     });
   }
 };
+const finder = async (req: Request, res: Response) => {
+  try {
+    const response = await finder_service(Dependency, req.params.find);
+    return res.status(200).json({
+      status: "success",
+      data: response,
+    });
+  } catch (Error: any) {
+    return res.status(400).json({
+      status: "error",
+      error: Error.message,
+    });
+  }
+};
 
 export default {
   crearDependency,
@@ -179,4 +194,5 @@ export default {
   leerDependencysById,
   actualizarDependency,
   borrarDependency,
+  finder,
 };

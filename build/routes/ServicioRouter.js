@@ -10,5 +10,6 @@ router.post("/crear", Servicio_controller_1.default.crearServicio);
 router.put("/actualizar/:id?", Servicio_controller_1.default.actualizarServicio);
 router.get("/get-all", Servicio_controller_1.default.leerServicios);
 router.get("/get-by-id/:id", Servicio_controller_1.default.leerServiciosById);
+router.get("/find/:find", Servicio_controller_1.default.finder);
 router.delete("/delete-by-id/:id", Servicio_controller_1.default.borrarServicio);
 exports.default = router;

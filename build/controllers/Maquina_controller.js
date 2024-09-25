@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Maquina_1 = __importDefault(require("../models/Maquina"));
+const finder_service_1 = __importDefault(require("../services/finder_service"));
 const crearMaquina = async (req, res) => {
     if (!req.body.name ||
         !req.body.id_Departamento ||
@@ -195,10 +196,26 @@ const borrarMaquina = async (req, res) => {
         });
     }
 };
+const finder = async (req, res) => {
+    try {
+        const response = await (0, finder_service_1.default)(Maquina_1.default, req.params.find);
+        return res.status(200).json({
+            status: "success",
+            data: response,
+        });
+    }
+    catch (Error) {
+        return res.status(400).json({
+            status: "error",
+            error: Error.message,
+        });
+    }
+};
 exports.default = {
     crearMaquina,
     leerMaquinas,
     leerMaquinasById,
     actualizarMaquina,
     borrarMaquina,
+    finder,
 };
